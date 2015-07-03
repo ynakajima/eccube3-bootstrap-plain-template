@@ -12,11 +12,16 @@ ul.nav.navbar-nav.navbar-right
       | {% if is_granted('ROLE_USER') %}
       li
         a(href="{{ url('mypage') }}") マイページ
+      li.divider(role="separator")
       li
-        a(href="{{ url('logout') }}") ログアウト
+        a(href="{{ url('logout') }}")
+          button.btn.btn-default.btn-block.btn-xs ログアウト
       | {% else %}
       li
-        a(href="{{ url('entry') }}") 新規会員登録
+        a(href="{{ url('entry') }}")
+          button.btn.btn-success.btn-block 新規会員登録
+      li.divider(role="separator")
       li
-        a(href="{{ url('mypage_login') }}") ログイン
+        a(href="{{ url('mypage_login') }}")
+          button.btn.btn-info.btn-block ログイン
       | {% endif %}
