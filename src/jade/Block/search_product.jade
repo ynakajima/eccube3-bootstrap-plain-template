@@ -1,0 +1,6 @@
+form.navbar-form.navbar-right(method='get' action="{{ path('product_list') }}")
+  .form-group
+    | {{ form_widget(form.category_id) }}
+  .form-group
+    | {{ form_widget(form.name, {'attr': { 'placeholder' : "キーワードを入力" }} ) }}
+  button.btn.btn-default(type='submit') 検索

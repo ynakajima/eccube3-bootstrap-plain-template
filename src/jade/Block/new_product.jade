@@ -1,0 +1,14 @@
+h2 新入荷商品
+.row
+  | {% for i in range(0, 6) %}
+  div(class!="{{ i < 3 ? 'col-sm-4 col-xs-12' : 'col-sm-3 col-xs-6' }}")
+    .thumbnail
+      a(href="{{ url('product_detail', {id : 2}) }}")
+        img(src="{{ app.config.front_urlpath }}/img/top/img0{{ i + 3 }}.jpg")
+        .caption
+          h3 お気に入りのエスプレッソタイム
+          p コーヒータイムを上質な時間にしてくれる、口当たりのよさとデザイン性を兼ね備えたエスプレッソカップを集めました・・・
+          p
+            | read more...
+  | {% endfor %}
+

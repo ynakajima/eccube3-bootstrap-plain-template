@@ -1,0 +1,38 @@
+| {% set hasProducts = (Cart.CartItems|length) > 0 %}
+ul.nav.navbar-nav.navbar-right
+  li(class!="{{ hasProducts ? 'dropdown' }}")
+    a(href='{{ url(\'cart\') }}' data-toggle!="{{ hasProducts ? 'dropdown' }}")
+      i.glyphicon.glyphicon-shopping-cart
+      |  
+      span.badge {{ Cart.total_quantity }}
+      |  
+      span 合計 
+      span {{ Cart.total_price|price }}
+      |  
+      | {% if hasProducts %}
+      span.caret
+      | {% endif %}
+    ul.dropdown-menu
+      | {% for CartItem in Cart.CartItems %}
+      | {% set ProductClass = CartItem.Object %}
+      | {% set Product = ProductClass.Product %}
+      li
+        a(href="{{ url('product_detail', {id : Product.id}) }}")
+          .media
+            .media-left
+              img.media-object(width="50" src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}")
+            .media-body
+              p.media-heading.text-right
+                strong {{ Product.name }}
+                |  
+                span.badge {{ CartItem.quantity }}
+              p.text-right {{ CartItem.price|price }}
+                small （税込）
+      | {% endfor %}
+      | {% if hasProducts %}
+      li.divider(role="separator")
+      li
+        a(href="{{ url('cart') }}")
+          button.btn.btn-primary.btn-block カートへ進む
+      | {% endif %}
+

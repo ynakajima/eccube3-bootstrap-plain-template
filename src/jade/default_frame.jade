@@ -1,0 +1,80 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+
+    title {{ BaseInfo.shop_name }}{% if subtitle is defined and subtitle is not empty %} / {{ subtitle }}{% elseif title is defined and title is not empty %} / {{ title }}{% endif %}
+
+    | {% if PageLayout.author is not empty %}
+    meta(name='author' content='{{ PageLayout.author }}')
+    | {% endif %}
+
+    | {% if PageLayout.description is not empty %}
+    meta(name='description' content='{{ PageLayout.description }}')
+    | {% endif %}
+
+    | {% if PageLayout.keyword is not empty %}
+    meta(name='keywords' content='{{ PageLayout.keyword }}')
+    | {% endif %}
+
+    | {% if PageLayout.meta_robots is not empty %}
+    meta(name='robots' content='{{ PageLayout.meta_robots }}')
+    | {% endif %}
+
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    
+    link(rel='icon' href='{{ app.config.front_urlpath }}/img/common/favicon.ico')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css')
+
+    | {% block stylesheet %}{% endblock %}
+
+    | {% if PageLayout.Head %}
+    |  {{ include('block.twig', {'Blocks': PageLayout.Head}) }}
+    | {% endif %}
+
+  body(class='{{ body_class|default(\'other_page\') }}')
+    head
+      .navbar.navbar-default.navbar-static-top
+        .container
+          .navbar-header
+            button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href="{{ url('homepage') }}") {{ BaseInfo.shop_name }}
+
+          #navbar.collapse.navbar-collapse
+            | {% if PageLayout.Header %}
+            |   {{ include('block.twig', {'Blocks': PageLayout.Header}) }}
+            | {% endif %}
+    
+    .content-top.container
+      | {% if PageLayout.ContentsTop %}
+      |   {{ include('block.twig', {'Blocks': PageLayout.ContentsTop}) }}
+      hr
+      | {% endif %}
+
+    main
+      .container
+        | {% block main %}{% endblock %}
+
+    .content-bottom.container
+      | {% if PageLayout.ContentsBottom %}
+      |   {{ include('block.twig', {'Blocks': PageLayout.ContentsBottom}) }}
+      | {% endif %}
+    
+    hr
+
+    footer
+      .container
+        | {% if PageLayout.Footer %}
+        |   {{ include('block.twig', {'Blocks': PageLayout.Footer}) }}
+        | {% endif %}
+
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
+    script(src="{{ app.config.front_urlpath }}/js/eccube.js")
+    | {% block javascript %}{% endblock %}

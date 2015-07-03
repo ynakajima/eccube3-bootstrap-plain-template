@@ -1,0 +1,22 @@
+ul.nav.navbar-nav.navbar-right
+  li(class='dropdown')
+    a.dropdown-toggle(href='#' data-toggle='dropdown' role='button')
+      i.glyphicon.glyphicon-user
+      | {% if is_granted('ROLE_USER') %}
+      |   {{ app.user.name01 }} {{ app.user.name02 }} 様
+      | {% else %}
+      |   ゲスト 様
+      | {% endif %}
+      span(class='caret')
+    ul.dropdown-menu
+      | {% if is_granted('ROLE_USER') %}
+      li
+        a(href="{{ url('mypage') }}") マイページ
+      li
+        a(href="{{ url('logout') }}") ログアウト
+      | {% else %}
+      li
+        a(href="{{ url('entry') }}") 新規会員登録
+      li
+        a(href="{{ url('mypage_login') }}") ログイン
+      | {% endif %}
