@@ -1,0 +1,20 @@
+| {% if pages.pageCount > 1 %}
+ul.pagination
+  | {% if pages.previous is defined %}
+  li
+    a(href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'pageno': pages.previous})) }}" aria-label="Previous")
+      span(aria-hidden="true") &laquo;
+  | {% endif %}
+
+  | {% for page in pages.pagesInRange %}
+  li(class!="{{ page == pages.current ? 'active' }}")
+    a(href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'pageno': page})) }}") {{ page }}
+  | {% endfor %}
+  
+  | {% if pages.next is defined %}
+  li
+    a(href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'pageno': pages.next})) }}" aria-label="Next")
+      span(aria-hidden="true") &raquo;
+  | {% endif %}
+
+| {% endif %}
