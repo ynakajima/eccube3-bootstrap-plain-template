@@ -58,7 +58,7 @@ html
     | {% endif %}
 
     .container
-      {% set mainColumnSize = 12 %}
+      | {% set mainColumnSize = 12 %}
       .row
         | {% if PageLayout.SideLeft %}
         | {% set mainColumnSize = mainColumnSize -3 %}
