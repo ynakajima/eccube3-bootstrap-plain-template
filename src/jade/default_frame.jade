@@ -51,17 +51,17 @@ html
             |   {{ include('block.twig', {'Blocks': PageLayout.Header}) }}
             | {% endif %}
     
-    .content-top.container
-      | {% if PageLayout.ContentsTop %}
-      |   {{ include('block.twig', {'Blocks': PageLayout.ContentsTop}) }}
-      hr
-      | {% endif %}
+    | {% if PageLayout.ContentsTop %}
+    .container
+      .navbar
+        | {{ include('block.twig', {'Blocks': PageLayout.ContentsTop}) }}
+    | {% endif %}
 
     main
       .container
         | {% block main %}{% endblock %}
 
-    .content-bottom.container
+    .container
       | {% if PageLayout.ContentsBottom %}
       |   {{ include('block.twig', {'Blocks': PageLayout.ContentsBottom}) }}
       | {% endif %}

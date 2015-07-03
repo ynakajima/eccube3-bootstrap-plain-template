@@ -1,4 +1,4 @@
-ul.nav.nav-pills.navbar-nav
+ul.nav.navbar-nav
   | {% for Category in Categories %}
   | {% set hasChild = (Category.children|length > 0) %}
   li(role='presentation' class!='{{ hasChild ? \'dropdown\' }}')

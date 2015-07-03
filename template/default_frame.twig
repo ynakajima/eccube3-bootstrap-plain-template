@@ -33,16 +33,14 @@
           </div>
         </div>
       </div>
-    </head>
-    <div class="content-top container">
-      {% if PageLayout.ContentsTop %}
-        {{ include('block.twig', {'Blocks': PageLayout.ContentsTop}) }}
-      <hr>{% endif %}
-    </div>
+    </head>{% if PageLayout.ContentsTop %}
+    <div class="container">
+      <div class="navbar">{{ include('block.twig', {'Blocks': PageLayout.ContentsTop}) }}</div>
+    </div>{% endif %}
     <main>
       <div class="container">{% block main %}{% endblock %}</div>
     </main>
-    <div class="content-bottom container">
+    <div class="container">
       {% if PageLayout.ContentsBottom %}
         {{ include('block.twig', {'Blocks': PageLayout.ContentsBottom}) }}
       {% endif %}
