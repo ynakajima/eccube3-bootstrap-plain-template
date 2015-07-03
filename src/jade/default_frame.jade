@@ -35,7 +35,7 @@ html
     | {% endif %}
 
   body(class='{{ body_class|default(\'other_page\') }}')
-    head
+    header#header
       .navbar.navbar-default.navbar-static-top
         .container
           .navbar-header
@@ -52,27 +52,55 @@ html
             | {% endif %}
     
     | {% if PageLayout.ContentsTop %}
-    .container
+    #contents_top.container
       .navbar
         | {{ include('block.twig', {'Blocks': PageLayout.ContentsTop}) }}
     | {% endif %}
 
-    main
-      .container
-        | {% block main %}{% endblock %}
+    .container
+      {% set mainColumnSize = 12 %}
+      .row
+        | {% if PageLayout.SideLeft %}
+        | {% set mainColumnSize = mainColumnSize -3 %}
+        #side_left.col-md-3
+          | {{ include('block.twig', {'Blocks': PageLayout.SideLeft}) }}
+        | {% endif %}
+        
+        | {# main のカラム幅を計算 #}
+        | {% if PageLayout.SideRight %}
+        | {% set mainColumnSize = mainColumnSize -3 %}
+        | {% endif %}
+
+        main(class!="{{ 'col-md-' ~ mainColumnSize }}")
+          | {% if PageLayout.MainTop %}
+          #main_top
+            | {{ include('block.twig', {'Blocks': PageLayout.MainTop}) }}
+          | {% endif %}
+
+          #main
+            | {% block main %}{% endblock %}
+
+          | {% if PageLayout.MainBottom %}
+          #main_bottom
+            | {{ include('block.twig', {'Blocks': PageLayout.MainBottom}) }}
+          | {% endif %}
+
+        | {% if PageLayout.SideRight %}
+        #side_right.col-md-3
+          | {{ include('block.twig', {'Blocks': PageLayout.SideRight}) }}
+        | {% endif %}
 
     .container
       | {% if PageLayout.ContentsBottom %}
       |   {{ include('block.twig', {'Blocks': PageLayout.ContentsBottom}) }}
       | {% endif %}
     
+    | {% if PageLayout.Footer %}
     hr
-
     footer
       .container
-        | {% if PageLayout.Footer %}
-        |   {{ include('block.twig', {'Blocks': PageLayout.Footer}) }}
-        | {% endif %}
+        | {{ include('block.twig', {'Blocks': PageLayout.Footer}) }}
+    | {% endif %}
 
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
