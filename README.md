@@ -1,0 +1,93 @@
+# EC-CUBE3 Bootstrap Plain Template
+
+> EC-CUBE3 用のプレーンな Bootstrap テンプレート
+
+![スクリーンショット](https://raw.githubusercontent.com/ynakajima/eccube3-bootstrap-plain-template/develop/screenshot.jpg)
+
+## 概要
+
+EC-CUBE3 からデフォルトのテンプレートに Bootstrap3 が採用されていますが、カスタマイズが諸々ほどこされているので、Twig の練習も兼ねプレーンな Bootstrap で実装をしてみました。（現在実装中）
+
+## 方針
+
+素のままの Bootstrap で実装する
+
+* スタイル（外部CSS、style要素、style属性）は一切加えない
+* JavaScript も足さない（EC-CUBE で用意されているものは利用する）
+* レイアウト用の素材として画像は一切使用しない（ダミー用の商品写真、バナー等は除く）
+
+## つかいかた
+`template` ディレクトリ直下にあるファイル一式を、EC-CUBE の `src/Eccube/Resource/template/default` に上書き。(他に方法あるのかな…？)
+
+```sh
+$ rsync -av template/ {EC-CUBEのディレクトリ}/src/Eccube/Resource/template/default
+```
+
+## 開発方法
+素の html を書くのが億劫なので jade をつかって Twig のテンプレートファイルを書き出しています。
+
+`src/jade` 以下にある jade ファイルを編集後 `gulp jade` コマンドを打つと `template` ディレクトリに Twig ファイルが書き出されます。
+
+## 実装状況
+* ✔ <del>default_frame</del>
+* ✔ <del>block</del>
+* ✔ <del>index</del>
+* ✔ <del>pagination</del>
+* ✔ <del>Block/cart</del>
+* ✔ <del>Block/category</del>
+* ✔ <del>Block/footer</del>
+* ✔ <del>Block/free</del>
+* ✔ <del>Block/garally</del>
+* ✔ <del>Block/login</del>
+* ✔ <del>Block/logo</del>
+* ✔ <del>Block/new_product</del>
+* ✔ <del>Block/news</del>
+* ✔ <del>Block/search_product</del>
+* ✔ <del>Product/list</del>
+* Product/detail
+* Cart/index
+* Contact/complete
+* Contact/confirm
+* Contact/index
+* Entry/activate
+* Entry/complete
+* Entry/confirm
+* Entry/index
+* Forgot/complete
+* Forgot/index
+* Forgot/reset
+* Form/form_layout
+* Help/about
+* Help/agreement
+* Help/guide
+* Help/privacy
+* Help/tradelaw
+* Mypage/change
+* Mypage/change_complete
+* Mypage/delivery
+* Mypage/delivery_edit
+* Mypage/error
+* Mypage/favorite
+* Mypage/history
+* Mypage/index
+* Mypage/login
+* Mypage/mail_view
+* Mypage/navi
+* Mypage/withdraw
+* Mypage/withdraw_complete
+* Myapge/withdraw_confirm
+* Shopping/complete
+* Shopping/index
+* Shopping/login
+* Shopping/nonmember
+* Shopping/shipping
+* Shopping/shipping_edit
+* Shopping/shipping_multiple
+* Shopping/shopping_error
+* error
+
+## LICENSE
+[![license GNU GPL v2.0](https://img.shields.io/badge/license-GNU%20GPL%20v2.0-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
+
+Copyright(c) 2015 ynakajima <yuhta.nakajima@gmail.com>
+Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
