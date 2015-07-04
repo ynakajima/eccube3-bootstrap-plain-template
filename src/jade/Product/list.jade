@@ -55,7 +55,7 @@ hr
 .row
   | {% set index = 1 %}
   | {% for Product in pagination %}
-  .col-sm-4.col-xs-6
+  .col-sm-3.col-xs-6
     .thumbnail
       a(href="{{ url('product_detail', {'id': Product.id}) }}")
         img(src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}")
@@ -71,7 +71,7 @@ hr
         | {% else %}
         p {{ Product.getPrice02IncTaxMin|price }}
         | {% endif %}
-  |   {% if index % 3 == 0 %}
+  |   {% if index % 4 == 0 %}
   .clearfix.hidden-xs
   |   {% endif %}
   |   {% if index % 2 == 0 %}
