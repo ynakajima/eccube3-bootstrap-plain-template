@@ -26,7 +26,7 @@ script.
 | {% block main %}
 .row
   //- 商品写真
-  .col-sm-6 
+  .col-sm-7
     | {% if Product.ProductImage|length > 1 %}  
     #product-detail-carousel.carousel.slide(data-ride='carousel')
       ol.carousel-indicators
@@ -50,16 +50,28 @@ script.
         span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
         span.sr-only
           | Next
+    hr
+    .row
+      | {# サムネイル #}
+      | {% set index = 0 %}
+      | {% for ProductImage in Product.ProductImage %}
+      .col-xs-4.col-md-3
+        a(href="#product-detail-carousel" data-target="#product-detail-carousel" data-slide-to="{{ index }}")
+          img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}")
+      |   {% set index = index + 1 %}
+      | {% endfor %}
     | {% elseif Product.ProductImage|length == 1 %}
     |   {% for ProductImage in Product.ProductImage %}
     img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}")
     |   {% endfor %}
     | {% else %}
     img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}")
+
     | {% endif %}
+
   
   //- 商品情報
-  .col-sm-6
+  .col-sm-5
     h1.page-header {{  Product.name }}
 
     //- 通常価格
@@ -139,27 +151,27 @@ script.
       |   {# 規格 #}
       |   {% if form.classcategory_id1 is defined %}
       .form-group
-        .col-md-8
+        .col-md-9
           | {# 規格1 #}
           | {{ form_widget(form.classcategory_id1) }} {{ form_errors(form.classcategory_id1) }}
       |   {% endif %}
       |   {% if form.classcategory_id2 is defined %}
       .form-group
-        .col-md-8
+        .col-md-9
           | {# 規格2 #}
           | {{ form_widget(form.classcategory_id2) }} {{ form_errors(form.classcategory_id2) }}
       |   {% endif %}
 
       .form-group
         | {# 数量 #}
-        .col-sm-2
+        .col-sm-3
           label.control-label 数量
         .col-sm-3
           | {{ form_widget(form.quantity) }} {{ form_errors(form.quantity) }}
 
       .form-group
         | {# カートボタン #}
-        .col-md-8
+        .col-md-9
           button.btn.btn-primary.btn-lg.btn-block(type="submit") カートに入れる
 
       | {% else %}

@@ -23,9 +23,7 @@
 </script>{% endblock %}
 {% block main %}
 <div class="row">
-  <div class="col-sm-6">
-     
-    {% if Product.ProductImage|length > 1 %}  
+  <div class="col-sm-7">{% if Product.ProductImage|length > 1 %}  
     <div id="product-detail-carousel" data-ride="carousel" class="carousel slide">
       <ol class="carousel-indicators">
         {% set index = 0 %}
@@ -39,11 +37,19 @@
         <div class="item {{ index == 0 ? 'active' }}"><img width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"/></div>  {% set index = index + 1 %}
         {% endfor %}
       </div><a href="#product-detail-carousel" role="button" data-slide="prev" class="left carousel-control"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span><span class="sr-only">Previous</span></a><a href="#product-detail-carousel" role="button" data-slide="next" class="right carousel-control"><span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span><span class="sr-only">Next</span></a>
+    </div>
+    <hr/>
+    <div class="row">
+      {# サムネイル #}
+      {% set index = 0 %}
+      {% for ProductImage in Product.ProductImage %}
+      <div class="col-xs-4 col-md-3"><a href="#product-detail-carousel" data-target="#product-detail-carousel" data-slide-to="{{ index }}"><img width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"/></a></div>  {% set index = index + 1 %}
+      {% endfor %}
     </div>{% elseif Product.ProductImage|length == 1 %}
       {% for ProductImage in Product.ProductImage %}<img width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"/>  {% endfor %}
     {% else %}<img width="100%" src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}"/>{% endif %}
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-5">
     <h1 class="page-header">{{  Product.name }}</h1>{# 通常価格を取得 #}
     {% set price01 = null %}
     {% if Product.hasProductClass -%}
@@ -95,26 +101,26 @@
         {# 規格 #}
         {% if form.classcategory_id1 is defined %}
       <div class="form-group">
-        <div class="col-md-8">
+        <div class="col-md-9">
           {# 規格1 #}
           {{ form_widget(form.classcategory_id1) }} {{ form_errors(form.classcategory_id1) }}
         </div>
       </div>  {% endif %}
         {% if form.classcategory_id2 is defined %}
       <div class="form-group">
-        <div class="col-md-8">
+        <div class="col-md-9">
           {# 規格2 #}
           {{ form_widget(form.classcategory_id2) }} {{ form_errors(form.classcategory_id2) }}
         </div>
       </div>  {% endif %}
       <div class="form-group">{# 数量 #}
-        <div class="col-sm-2">
+        <div class="col-sm-3">
           <label class="control-label">数量</label>
         </div>
         <div class="col-sm-3">{{ form_widget(form.quantity) }} {{ form_errors(form.quantity) }}</div>
       </div>
       <div class="form-group">{# カートボタン #}
-        <div class="col-md-8">
+        <div class="col-md-9">
           <button type="submit" class="btn btn-primary btn-lg btn-block">カートに入れる</button>
         </div>
       </div>{% else %}
