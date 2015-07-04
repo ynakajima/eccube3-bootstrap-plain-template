@@ -44,7 +44,7 @@
       <div class="col-xs-1 text-center"><a type="button" aria-label="Close" href="{{ url('cart_remove', {'productClassId': ProductClass.id }) }}" class="close"><span aria-hidden="true">&times;</span></a></div>
       <div class="col-xs-6 col-sm-5 col-sm-offset-1">
         <div class="row">
-          <div class="col-xs-5 col-sm-4"><a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}"><img width="100%" src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}"/></a></div>
+          <div class="col-xs-5 col-sm-4"><a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}"><img src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}" class="img-responsive"/></a></div>
           <dl class="col-xs-7 col-sm-8">
             <dt> <a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}"><strong>{{ Product.name }}</strong></a></dt>
             <dd class="small">

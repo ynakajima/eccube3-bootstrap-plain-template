@@ -8,7 +8,7 @@
       {% set Product = ProductClass.Product %}
       <li><a href="{{ url('product_detail', {id : Product.id}) }}">
           <div class="media">
-            <div class="media-left"><img width="50" src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" class="media-object"/></div>
+            <div class="media-left"><img width="50" src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}" class="media-object"/></div>
             <div class="media-body">
               <p class="media-heading text-right"><strong>{{ Product.name }}</strong> <span class="badge">{{ CartItem.quantity }}</span></p>
               <p class="text-right">{{ CartItem.price|price }}<small>（税込）</small></p>

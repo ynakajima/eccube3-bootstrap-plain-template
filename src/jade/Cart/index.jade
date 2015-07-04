@@ -80,7 +80,7 @@ h1.page-header ショッピングカート
         .row
           .col-xs-5.col-sm-4
             a(target="_blank" href!="{{ url('product_detail', {id : Product.id} ) }}")
-              img(width="100%" src!="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}")
+              img.img-responsive(src!="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}")
           dl.col-xs-7.col-sm-8
             dt 
               a(target="_blank" href!="{{ url('product_detail', {id : Product.id} ) }}")

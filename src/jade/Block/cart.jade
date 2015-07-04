@@ -20,7 +20,7 @@ ul.nav.navbar-nav.navbar-right
         a(href="{{ url('product_detail', {id : Product.id}) }}")
           .media
             .media-left
-              img.media-object(width="50" src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}")
+              img.media-object(width="50" src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}")
             .media-body
               p.media-heading.text-right
                 strong {{ Product.name }}

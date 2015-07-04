@@ -26,7 +26,7 @@ script.
 | {% block main %}
 .row
   | {# 商品写真 #}
-  .col-sm-7
+  .col-sm-6
     | {% if Product.ProductImage|length > 1 %}  
     #product-detail-carousel.carousel.slide(data-ride='carousel')
       ol.carousel-indicators
@@ -39,7 +39,7 @@ script.
         | {% set index = 0 %}
         | {% for ProductImage in Product.ProductImage %}
         .item(class!="{{ index == 0 ? 'active' }}")
-          img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}")
+          img.img-responsive(src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}" alt="")
         |   {% set index = index + 1 %}
         | {% endfor %}
       a.left.carousel-control(href="#product-detail-carousel" role="button" data-slide="prev")
@@ -57,21 +57,21 @@ script.
       | {% for ProductImage in Product.ProductImage %}
       .col-xs-4.col-md-3
         a(href="#product-detail-carousel" data-target="#product-detail-carousel" data-slide-to="{{ index }}")
-          img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}")
+          img.img-responsive(src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}" alt="")
       |   {% set index = index + 1 %}
       | {% endfor %}
     | {% elseif Product.ProductImage|length == 1 %}
     |   {% for ProductImage in Product.ProductImage %}
-    img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}")
+    img.img-responsive(src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}" alt="")
     |   {% endfor %}
     | {% else %}
-    img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}")
+    img.img-responsive(src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}" alt="no image")
 
     | {% endif %}
 
   
   | {# 商品情報 #}
-  .col-sm-5
+  .col-sm-6
     h1.page-header {{  Product.name }}
 
     | {# 通常価格 #}
