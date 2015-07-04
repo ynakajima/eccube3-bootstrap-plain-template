@@ -8,13 +8,16 @@
     <ul class="dropdown-menu">{% if is_granted('ROLE_USER') %}
       <li><a href="{{ url('mypage') }}">マイページ</a></li>
       <li role="separator" class="divider"></li>
-      <li><a href="{{ url('logout') }}">
-          <button class="btn btn-default btn-block btn-xs">ログアウト</button></a></li>{% else %}
-      <li><a href="{{ url('entry') }}">
-          <button class="btn btn-success btn-block">新規会員登録</button></a></li>
+      <li class="row">
+        <div class="col-xs-10 col-xs-offset-1"><a href="{{ url('logout') }}" class="btn btn-default btn-block">ログアウト</a></div>
+      </li>{% else %}
+      <li class="row">
+        <div class="col-xs-10 col-xs-offset-1"><a href="{{ url('entry') }}" class="btn btn-success btn-block">新規会員登録</a></div>
+      </li>
       <li role="separator" class="divider"></li>
-      <li><a href="{{ url('mypage_login') }}">
-          <button class="btn btn-info btn-block">ログイン</button></a></li>{% endif %}
+      <li class="row">
+        <div class="col-xs-10 col-xs-offset-1"><a href="{{ url('mypage_login') }}" class="btn btn-default btn-block">ログイン</a></div>
+      </li>{% endif %}
     </ul>
   </li>
 </ul>

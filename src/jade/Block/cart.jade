@@ -31,11 +31,12 @@ ul.nav.navbar-nav.navbar-right
       | {% endfor %}
       | {% if hasProducts %}
       li.divider(role="separator")
-      li
-        a(href="{{ url('cart') }}")
-          button.btn.btn-primary.btn-block カートへ進む
-      li
-        a
-          button.btn.btn-default.btn-block.btn-xs キャンセル
+      li.row
+        .col-xs-10.col-xs-offset-1
+          p
+            a.btn.btn-primary.btn-block(href="{{ url('cart') }}") カートへ進む
+      li.row
+        .col-xs-10.col-xs-offset-1
+          a.btn.btn-default.btn-block.btn-xs キャンセル
       | {% endif %}
 

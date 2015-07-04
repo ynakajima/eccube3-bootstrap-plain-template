@@ -13,15 +13,16 @@ ul.nav.navbar-nav.navbar-right
       li
         a(href="{{ url('mypage') }}") マイページ
       li.divider(role="separator")
-      li
-        a(href="{{ url('logout') }}")
-          button.btn.btn-default.btn-block.btn-xs ログアウト
+      li.row
+        .col-xs-10.col-xs-offset-1
+          a.btn.btn-default.btn-block(href="{{ url('logout') }}") ログアウト
       | {% else %}
-      li
-        a(href="{{ url('entry') }}")
-          button.btn.btn-success.btn-block 新規会員登録
+      li.row
+        .col-xs-10.col-xs-offset-1
+          a.btn.btn-success.btn-block(href="{{ url('entry') }}") 新規会員登録
       li.divider(role="separator")
-      li
-        a(href="{{ url('mypage_login') }}")
-          button.btn.btn-info.btn-block ログイン
+      li.row
+        .col-xs-10.col-xs-offset-1
+          a.btn.btn-default.btn-block(href="{{ url('mypage_login') }}") ログイン
+
       | {% endif %}
