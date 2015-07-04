@@ -1,0 +1,12 @@
+
+<ul class="nav navbar-nav">
+  {% for Category in Categories %}
+  {% set hasChild = (Category.children|length > 0) %}
+  <li role="presentation" class="{{ hasChild ? 'dropdown' }}"><a data-toggle="{{ hasChild ? 'dropdown' }}" href="{{ url('product_list') }}?category_id={{ Category.id }}" class="{{ hasChild ? 'dropdown-toggle' }}">
+      {{ Category.name }}
+       <span class="{{ hasChild ? 'caret' }}"></span></a>{% if hasChild %}
+    <ul class="dropdown-menu">{% for ChildCategory in Category.children %}
+      <li><a href="{{ url('product_list') }}?category_id={{ ChildCategory.id }}">{{ ChildCategory.name }}</a></li>{% endfor %}
+    </ul>{% endif %}
+  </li>{% endfor %}
+</ul>

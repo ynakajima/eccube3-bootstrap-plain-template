@@ -1,0 +1,78 @@
+
+{% extends 'default_frame.twig' %}
+{% set body_class = 'cart_page' %}
+{% block main %}
+<h1 class="page-header">ショッピングカート</h1>
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <ol class="breadcrumb text-center">
+      <li class="active"><span class="label label-primary">1</span><strong class="text-primary"> カートの商品</strong></li>{% if is_granted('ROLE_USER') %}
+      <li class="text-muted"><span class="label label-default">2</span> ご注文内容確認</li>
+      <li class="text-muted"><span class="label label-default">3</span> 完了</li>{% else %}
+      <li class="text-muted"><span class="label label-default">2</span> お客様情報</li>
+      <li class="text-muted"><span class="label label-default">3</span> ご注文内容確認</li>
+      <li class="text-muted"> <span class="label label-default">4</span> 完了</li>{% endif %}
+    </ol>{# エラー表示 #}
+    {% for error in app.session.flashbag.get('eccube.front.request.error')  %}
+    <div role="alert" class="alert alert-danger">{{ error|trans|nl2br }}</div>{% endfor %}
+    {% for error in app.session.flashbag.get('eccube.front.cart.error')  %}
+    <div role="alert" class="alert alert-danger">{{ error|trans|nl2br }}</div>{% endfor %}
+    {% if Cart.CartItems|length > 0 %}
+    <form name="form" id="form_cart" method="post" action="{{ url('cart') }}">
+      <div class="text-center">
+        <p>商品の合計金額は「<strong>{{ Cart.total_price|price }}</strong>」です。</p>{% if BaseInfo.delivery_free_amount and BaseInfo.delivery_free_quantity %}
+        <p>
+          {% if is_delivery_free %}
+          現在送料無料です
+          {% else %}
+          あと「<strong>{{ least|price }}</strong>」のお買い上げで<strong class="text-primary">送料無料</strong>になります。
+          {% endif %}
+        </p>{% endif %}
+      </div>
+    </form>
+    <hr/>
+    <div class="row text-center">
+      <div class="col-xs-2 text-left"><strong>削除</strong></div>
+      <div class="col-xs-5"><strong>商品内容</strong></div>
+      <div class="col-xs-2"><strong>数量</strong></div>
+      <div class="col-xs-3"><strong>小計</strong></div>
+    </div>
+    <hr/>{% for CartItem in Cart.CartItems %}
+    <div class="row">
+      {% set ProductClass = CartItem.Object %}
+      {% set Product = ProductClass.Product %}
+      <div class="col-xs-1 text-center"><a type="button" aria-label="Close" href="{{ url('cart_remove', {'productClassId': ProductClass.id }) }}" class="close"><span aria-hidden="true">&times;</span></a></div>
+      <div class="col-xs-6 col-sm-5 col-sm-offset-1">
+        <div class="row">
+          <div class="col-xs-5 col-sm-4"><a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}"><img width="100%" src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}"/></a></div>
+          <dl class="col-xs-7 col-sm-8">
+            <dt> <a target="_blank" href="{{ url('product_detail', {id : Product.id} ) }}"><strong>{{ Product.name }}</strong></a></dt>
+            <dd class="small">
+              {% if ProductClass.ClassCategory1 and ProductClass.ClassCategory1.id %}
+               {{ ProductClass.ClassCategory1.ClassName }}：{{ ProductClass.ClassCategory1 }}
+              {% endif %}
+              {% if ProductClass.ClassCategory2 and ProductClass.ClassCategory2.id %}<br/> {{ ProductClass.ClassCategory2.ClassName }}：{{ ProductClass.ClassCategory2 }}
+              {% endif %}
+            </dd>
+            <dd>￥{{ CartItem.price|number_format }}</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="col-xs-2 text-center">{{ CartItem.quantity|number_format }}
+        <ul class="list-inline">{% if CartItem.quantity > 1 %}
+          <li><a href="{{ url('cart_down', {'productClassId': ProductClass.id}) }}"><i class="glyphicon glyphicon-minus-sign"></i></a></li>{% endif %}
+          <li><a href="{{ url('cart_up', {'productClassId': ProductClass.id}) }}"><i class="glyphicon glyphicon-plus-sign"></i></a></li>
+        </ul>
+      </div>
+      <div class="col-xs-3 text-right">￥{{ CartItem.total_price|number_format }}</div>
+    </div>
+    <hr/>{% endfor %}
+    <div class="row">
+      <div class="col-sm-4 col-sm-offset-8">
+        <p class="lead text-right"><small>合計:　</small><strong class="text-primary">￥{{ Cart.total_price|number_format }}</strong></p>
+        <p><a href="{{ path('cart_buystep') }}" class="btn btn-primary btn-block">レジに進む</a><a href="{{ url('top') }}" class="btn btn-info btn-block">お買い物を続ける</a></p>
+      </div>
+    </div>{% else %}
+    <div role="alert" class="alert alert-warning text-center"><br/>※ 現在カート内に商品はございません。<br/><br/></div>{% endif %}
+  </div>
+</div>{% endblock %}

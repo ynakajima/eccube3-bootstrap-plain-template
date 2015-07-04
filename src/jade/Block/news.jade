@@ -1,0 +1,14 @@
+.panel.panel-default
+  .panel-heading
+    h2.panel-title 新着情報
+  .list-group
+    | {% for News in NewsList %}
+    article.list-group-item 
+      p {{ News.date|date("Y.m.d") }}
+      h4.list-group-item-heading {{ News.title }}
+      p.list-group-item-text {{ News.comment }}
+      | {% if News.url %}
+      p.list-group-item-text.text-right
+        a(href='{{ News.url }}' target!='{{ News.link_method == "1" ? "_blank" }}') 詳しくはこちら
+      | {% endif %}
+    | {% endfor %}

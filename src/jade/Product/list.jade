@@ -1,0 +1,86 @@
+| {% extends 'default_frame.twig' %}
+| {% set body_class = 'product_page' %}
+
+| {% block javascript %}
+script.
+  // 並び順を変更
+  function fnChangeOrderBy(orderby) {
+    eccube.setValue('orderby', orderby);
+    eccube.setValue('pageno', 1);
+    eccube.submitForm();
+  }
+
+  // 表示件数を変更
+  function fnChangeDispNumber(dispNumber) {
+    eccube.setValue('disp_number', dispNumber);
+    eccube.setValue('pageno', 1);
+    eccube.submitForm();
+  }
+| {% endblock %}
+
+| {% block main %}
+form(name="form1" id="form1" method="get" action="?")
+  | {{ form_widget(search_form) }}
+
+ol.breadcrumb
+  li
+    a(href="{{ url('product_list') }}") 全商品
+  | {% if Category is not null %}
+  |   {% set index = 1 %}
+  |   {% for Path in Category.path %} 
+  |    {% set isActive = index == (Category.path|length) %}
+  li(class!="{{ isActive ? 'active' }}")
+    |    {% if isActive %}
+    |      {{ Path.name }}
+    |    {% else %}
+    a(href="{{ url('product_list') }}?category_id={{ Path.id }}") {{ Path.name }}
+    |    {% endif %}
+    |    {% set index = index + 1 %}
+  |   {% endfor %}
+  | {% endif %}
+
+.row
+  form.form-inline(name="page_navi_top" id="page_navi_top" action="?")
+    p.col-sm-6
+      strong {{ pagination.totalItemCount }} 件
+      | の商品がみつかりました
+    .col-sm-6.text-right
+      .form-group
+        | {{ form_widget(disp_number_form, {'id': '', 'attr': {'onchange': "javascript:fnChangeDispNumber(this.value);"}}) }}
+      .form-group
+        | {{ form_widget(order_by_form, {'id': '', 'attr': {'onchange': "javascript:fnChangeOrderBy(this.value);"}}) }}
+
+hr
+
+.row
+  | {% set index = 1 %}
+  | {% for Product in pagination %}
+  .col-sm-3.col-xs-6
+    .thumbnail
+      a(href="{{ url('product_detail', {'id': Product.id}) }}")
+        img(src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}")
+      .caption
+        p 
+          strong
+            a(href="{{ url('product_detail', {'id': Product.id}) }}") {{ Product.name }}
+        | {% if Product.description_list %}
+        p.lead {{ Product.description_list }}
+        | {% endif %}
+        | {% if Product.hasProductClass %}
+        p {{ Product.getPrice02IncTaxMin|price }} ～ {{ Product.getPrice02IncTaxMax|price }} 
+        | {% else %}
+        p {{ Product.getPrice02IncTaxMin|price }}
+        | {% endif %}
+  |   {% if index % 4 == 0 %}
+  .clearfix.hidden-xs
+  |   {% endif %}
+  |   {% if index % 2 == 0 %}
+  .clearfix.visible-xs-block
+  |   {% endif %}
+  |   {% set index = index + 1 %}
+  | {% endfor %}
+
+| {% if pagination.totalItemCount > 0 %}
+|   {% include "pagination.twig" with { 'pages' : pagination.paginationData } %}
+| {% endif %}
+| {% endblock %}

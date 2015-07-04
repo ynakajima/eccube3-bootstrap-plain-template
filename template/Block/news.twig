@@ -1,0 +1,14 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h2 class="panel-title">新着情報</h2>
+  </div>
+  <div class="list-group">{% for News in NewsList %}
+    <article class="list-group-item"> 
+      <p>{{ News.date|date("Y.m.d") }}</p>
+      <h4 class="list-group-item-heading">{{ News.title }}</h4>
+      <p class="list-group-item-text">{{ News.comment }}</p>{% if News.url %}
+      <p class="list-group-item-text text-right"><a href="{{ News.url }}" target="{{ News.link_method == "1" ? "_blank" }}">詳しくはこちら</a></p>{% endif %}
+    </article>{% endfor %}
+  </div>
+</div>

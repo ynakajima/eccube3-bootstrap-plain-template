@@ -1,0 +1,7 @@
+{% for Block in Blocks %}
+<!-- start {{ Block.name }}-->  {% if Block.logic_flg %}
+      {{ render(path('block_' ~ Block.file_name)) }}
+  {% else %}
+      {{ include('Block/' ~ Block.file_name~ '.twig') }}
+  {% endif %}
+<!-- end {{ Block.name }}-->{% endfor %}

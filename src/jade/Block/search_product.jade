@@ -1,0 +1,9 @@
+form.navbar-form.navbar-right(method='get' action="{{ path('product_list') }}")
+  .form-group
+    label
+      i.glyphicon.glyphicon-search
+      |  商品を検索：
+    | {{ form_widget(form.category_id) }}
+  .form-group
+    | {{ form_widget(form.name, {'attr': { 'placeholder' : "キーワードを入力" }} ) }}
+  button.btn.btn-default(type='submit') 検索

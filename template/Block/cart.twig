@@ -1,0 +1,25 @@
+{% set hasProducts = (Cart.CartItems|length) > 0 %}
+<ul class="nav navbar-nav navbar-right">
+  <li class="{{ hasProducts ? 'dropdown' }}"><a href="{{ url('cart') }}" data-toggle="{{ hasProducts ? 'dropdown' }}"><i class="glyphicon glyphicon-shopping-cart"></i> <span class="badge">{{ Cart.total_quantity }}</span> <span>合計 </span><span>{{ Cart.total_price|price }}</span> 
+      {% if hasProducts %}<span class="caret"></span>{% endif %}</a>
+    <ul class="dropdown-menu">
+      {% for CartItem in Cart.CartItems %}
+      {% set ProductClass = CartItem.Object %}
+      {% set Product = ProductClass.Product %}
+      <li><a href="{{ url('product_detail', {id : Product.id}) }}">
+          <div class="media">
+            <div class="media-left"><img width="50" src="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" class="media-object"/></div>
+            <div class="media-body">
+              <p class="media-heading text-right"><strong>{{ Product.name }}</strong> <span class="badge">{{ CartItem.quantity }}</span></p>
+              <p class="text-right">{{ CartItem.price|price }}<small>（税込）</small></p>
+            </div>
+          </div></a></li>{% endfor %}
+      {% if hasProducts %}
+      <li role="separator" class="divider"></li>
+      <li><a href="{{ url('cart') }}">
+          <button class="btn btn-primary btn-block">カートへ進む</button></a></li>
+      <li><a>
+          <button class="btn btn-default btn-block btn-xs">キャンセル</button></a></li>{% endif %}
+    </ul>
+  </li>
+</ul>

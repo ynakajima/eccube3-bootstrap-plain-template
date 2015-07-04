@@ -1,0 +1,20 @@
+
+<ul class="nav navbar-nav navbar-right">
+  <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" class="dropdown-toggle"><i class="glyphicon glyphicon-user"></i>{% if is_granted('ROLE_USER') %}
+        {{ app.user.name01 }} {{ app.user.name02 }} 様
+      {% else %}
+        ゲスト 様
+      {% endif %}<span class="caret"></span></a>
+    <ul class="dropdown-menu">{% if is_granted('ROLE_USER') %}
+      <li><a href="{{ url('mypage') }}">マイページ</a></li>
+      <li role="separator" class="divider"></li>
+      <li><a href="{{ url('logout') }}">
+          <button class="btn btn-default btn-block btn-xs">ログアウト</button></a></li>{% else %}
+      <li><a href="{{ url('entry') }}">
+          <button class="btn btn-success btn-block">新規会員登録</button></a></li>
+      <li role="separator" class="divider"></li>
+      <li><a href="{{ url('mypage_login') }}">
+          <button class="btn btn-info btn-block">ログイン</button></a></li>{% endif %}
+    </ul>
+  </li>
+</ul>
