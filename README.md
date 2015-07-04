@@ -2,7 +2,7 @@
 
 > EC-CUBE3 用のプレーンな Bootstrap テンプレート
 
-![スクリーンショット](https://raw.githubusercontent.com/ynakajima/eccube3-bootstrap-plain-template/develop/screenshot.jpg)
+![スクリーンショット](https://raw.githubusercontent.com/ynakajima/eccube3-bootstrap-plain-template/master/screenshot.jpg)
 
 ## 概要
 
