@@ -88,7 +88,7 @@ $ rsync -av template/ {EC-CUBEのディレクトリ}/src/Eccube/Resource/templat
 * error
 
 ## LICENSE
-[![license GNU GPL v2.0](https://img.shields.io/badge/license-GNU%20GPL%20v2.0-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
+[![license GNU GPL v2.0](https://img.shields.io/badge/license-GNU%20GPL%20v2.0-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)  
 
 Copyright(c) 2015 ynakajima <yuhta.nakajima@gmail.com>
 Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
