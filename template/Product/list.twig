@@ -46,7 +46,7 @@
   {% set index = 1 %}
   {% for Product in pagination %}
   <div class="col-sm-3 col-xs-6">
-    <div class="thumbnail"><a href="{{ url('product_detail', {'id': Product.id}) }}"><img src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}"/></a>
+    <div class="thumbnail"><a href="{{ url('product_detail', {'id': Product.id}) }}"><img src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}" alt="{{ Product.name }}"/></a>
       <div class="caption">
         <p> <strong><a href="{{ url('product_detail', {'id': Product.id}) }}">{{ Product.name }}</a></strong></p>{% if Product.description_list %}
         <p class="lead">{{ Product.description_list }}</p>{% endif %}

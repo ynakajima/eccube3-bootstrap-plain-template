@@ -74,13 +74,13 @@ h1.page-header ショッピングカート
       | {% set ProductClass = CartItem.Object %}
       | {% set Product = ProductClass.Product %}
       .col-xs-1.text-center
-        a.close(type="button" aria-label="Close" href="{{ url('cart_remove', {'productClassId': ProductClass.id }) }}")
+        a.close(aria-label="Close" href="{{ url('cart_remove', {'productClassId': ProductClass.id }) }}")
           span(aria-hidden="true") &times;
       .col-xs-6.col-sm-5.col-sm-offset-1
         .row
           .col-xs-5.col-sm-4
             a(target="_blank" href!="{{ url('product_detail', {id : Product.id} ) }}")
-              img(width="100%" src!="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}")
+              img.img-responsive(src!="{{ app.config.image_save_urlpath }}/{{ Product.MainListImage|no_image_product }}" alt="{{ Product.name }}")
           dl.col-xs-7.col-sm-8
             dt 
               a(target="_blank" href!="{{ url('product_detail', {id : Product.id} ) }}")

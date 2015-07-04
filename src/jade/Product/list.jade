@@ -58,7 +58,7 @@ hr
   .col-sm-3.col-xs-6
     .thumbnail
       a(href="{{ url('product_detail', {'id': Product.id}) }}")
-        img(src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}")
+        img(src="{{ app.config.image_save_urlpath }}/{{ Product.main_list_image|no_image_product }}" alt="{{ Product.name }}")
       .caption
         p 
           strong
