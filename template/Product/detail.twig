@@ -22,7 +22,7 @@
   
 </script>{% endblock %}
 {% block main %}
-<div class="row">
+<div class="row">{# 商品写真 #}
   <div class="col-sm-7">{% if Product.ProductImage|length > 1 %}  
     <div id="product-detail-carousel" data-ride="carousel" class="carousel slide">
       <ol class="carousel-indicators">
@@ -48,9 +48,10 @@
     </div>{% elseif Product.ProductImage|length == 1 %}
       {% for ProductImage in Product.ProductImage %}<img width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"/>  {% endfor %}
     {% else %}<img width="100%" src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}"/>{% endif %}
-  </div>
+  </div>{# 商品情報 #}
   <div class="col-sm-5">
-    <h1 class="page-header">{{  Product.name }}</h1>{# 通常価格を取得 #}
+    <h1 class="page-header">{{  Product.name }}</h1>{# 通常価格 #}
+    {# 通常価格を取得 #}
     {% set price01 = null %}
     {% if Product.hasProductClass -%}
       {% if Product.getPrice01Min == Product.getPrice01Max %}
@@ -63,8 +64,11 @@
         {% set price01 = Product.getPrice01IncTaxMin|price %}
       {% endif %}
     {% endif -%}
+    {# 通常価格を表示 #}
     {% if price01 is not null %}
-    <p> <small>通常価格：{{ price01 }} 税込</small></p>{% endif %}{# 販売価格を取得 #}
+    <p> <small>通常価格：{{ price01 }} 税込</small></p>{% endif %}
+    {# 販売価格 #}
+    {# 販売価格を取得 #}
     {% set price02 = null %}
     {% if Product.hasProductClass -%}
       {% if Product.getPrice02Min == Product.getPrice02Max %}
@@ -77,25 +81,27 @@
         {% set price02 = Product.getPrice02IncTaxMin|price %}
       {% endif %}
     {% endif -%}
+    {# 販売価格を表示 #}
     {% if price02 is not null %}
     <p class="lead"><strong class="text-primary">{{ price02 }}</strong>  <small>税込 </small></p>{% endif %}
-    <hr/>
-    <dl>{%- if Product.code_min != '' %}
+    <hr/>{% if Product.code_min != '' or (Product.ProductCategories|length) > 0 %}
+    <dl>
+      {# 商品コード #}
+      {%- if Product.code_min != '' %}
       <dt>商品コード</dt>  {%- if Product.hasProductClass -%}
       <dd>{{ Product.code_min }} ～ {{ Product.code_max }}</dd>  {%- else -%}
       <dd>{{ Product.code_min }}</dd>  {%- endif -%}
-      {%- endif -%}
-      <hr/>
-      <dt>
-         
-        関連カテゴリ
-      </dt>
+      <hr/>{%- endif -%}
+      {% if (Product.ProductCategories|length) > 0 %}
+      {# 関連カテゴリ #}
+      <dt>関連カテゴリ</dt>
       <dd>
         {% for ProductCategory in Product.ProductCategories %}
           {% for Category in ProductCategory.Category.path %} <a href="{{ url('product_list') }}?category_id={{ Category.id }}">{{ Category.name }}</a>  {% endfor %}<br/>{% endfor %}
-      </dd>
+      </dd>{%- endif -%}
     </dl>
-    <hr/>
+    <hr/>{% endif %}
+    {# 買い物カゴ #}
     <form action="?" method="post" id="form1" name="form1" class="form-horizontal">
       {% if Product.stock_find %} 
         {# 規格 #}
@@ -131,6 +137,13 @@
         </div>
       </div>{% endif %}
       {{ form_rest(form) }}
-    </form>
-  </div>
+    </form>{# 商品説明 #}
+    {% if Product.description_detail %}
+    <hr/>
+    <p>{{ Product.description_detail }}</p>{% endif %}
+    {# フリーエリア #}
+    {% if Product.freearea %}
+    <hr/>
+    <div>{{ include(template_from_string(Product.freearea)) }}</div>
+  </div>{% endif %}
 </div>{% endblock %}
