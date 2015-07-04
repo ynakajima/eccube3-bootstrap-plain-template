@@ -18,11 +18,32 @@ EC-CUBE3 からデフォルトのテンプレートに Bootstrap3 が採用さ�
 * レイアウト用の素材として画像は一切使用しない（ダミー用の商品写真、バナー等は除く）
 
 ## つかいかた
-`template` ディレクトリ直下にあるファイル一式を、EC-CUBE の `src/Eccube/Resource/template/default` に上書き。(他に方法あるのかな…？)
+
+`template` ディレクトリ直下にあるファイル一式を、EC-CUBE の `app/template/default` に上書き。
 
 ```sh
-$ rsync -av template/ {EC-CUBEのディレクトリ}/src/Eccube/Resource/template/default
+$ rsync -av template/ {EC-CUBEのディレクトリ}/app/template/default
 ```
+
+※ 反映されない場合は `app/cache/twig/default` 以下にあるキャッシュファイルを消去。
+
+### 新規テンプレートとして登録する場合
+新規のテンプレートとして登録したい場合はまず、DBにテンプレートデータを追加します。
+
+```sql
+INSERT INTO `dtb_template` (`device_type_id`, `template_code`, `template_name`, `create_date`, `update_date`)
+VALUES (10, 'bootstrap-plain-template', 'EC-CUBE3 Bootstrap Plain Template', NOW(), NOW());
+```
+
+つぎに、テンプレート用のディレクトリを用意。（html/template は default のをコピーして利用）
+
+```sh
+$ cp -R template {EC-CUBEのディレクトリ}/app/template/bootstrap-plain-template
+$ cp -R {EC-CUBEのディレクトリ}/html/template/default {EC-CUBEのディレクトリ}/app/template/bootstrap-plain-template
+```
+
+最後に、管理画面の `設定 > オーナーズストア > テンプレート` 画面にアクセスして、`テンプレート一覧` にある `EC-CUBE3 Bootstrap Plain Template` を選択して `登録` して下さい。
+
 
 ## 開発方法
 素の html を書くのが億劫なので jade をつかって Twig のテンプレートファイルを書き出しています。
