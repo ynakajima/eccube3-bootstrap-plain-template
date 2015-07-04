@@ -46,7 +46,7 @@ $ rsync -av template/ {EC-CUBEのディレクトリ}/src/Eccube/Resource/templat
 * ✔ <del>Block/search_product</del>
 * ✔ <del>Product/list</del>
 * ✔ <del>Product/detail</del>
-* Cart/index
+* ✔ <del>Cart/index</del>
 * Contact/complete
 * Contact/confirm
 * Contact/index
