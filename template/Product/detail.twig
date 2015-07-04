@@ -1,232 +1,130 @@
-{#
-This file is part of EC-CUBE
 
-Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
-
-http://www.lockon.co.jp/
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#}
 {% extends 'default_frame.twig' %}
-
 {% set body_class = 'product_page' %}
-
 {% block javascript %}
 <script>
-    eccube.classCategories = {{ Product.class_categories|json_encode|raw }};
-
-    // 規格2に選択肢を割り当てる。
-    function fnSetClassCategories(form, classcat_id2_selected) {
-        var $form = $(form);
-        var product_id = $form.find('input[name=product_id]').val();
-        var $sele1 = $form.find('select[name=classcategory_id1]');
-        var $sele2 = $form.find('select[name=classcategory_id2]');
-        eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
-    }
-
-    {% if form.classcategory_id2 is defined %}
-    fnSetClassCategories(
-            document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
-    );
-    {% endif %}
-</script>
-
-<script>
-$(function(){
-    $('.carousel').slick({
-        infinite: false,
-        speed: 300,
-        prevArrow:'<button type="button" class="slick-prev"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
-        nextArrow:'<button type="button" class="slick-next"><span class="angle-circle"><svg class="cb cb-angle-right"><use xlink:href="#cb-angle-right" /></svg></span></button>',
-        slidesToShow: 4,
-        slidesToScroll: 4,
-        responsive: [
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 3
-                }
-            }
-        ]
-    });
-
-    $('.slides').slick({
-        dots: true,
-        arrows: false,
-        speed: 300,
-        customPaging: function(slider, i) {
-            return '<button class="thumbnail">' + $(slider.$slides[i]).find('img').prop('outerHTML') + '</button>';
-        }
-    });
-});
-</script>
-
-{% endblock %}
-
+  eccube.classCategories = {{ Product.class_categories|json_encode|raw }};
+  
+  // 規格2に選択肢を割り当てる。
+  function fnSetClassCategories(form, classcat_id2_selected) {
+    var $form = $(form);
+    var product_id = $form.find('input[name=product_id]').val();
+    var $sele1 = $form.find('select[name=classcategory_id1]');
+    var $sele2 = $form.find('select[name=classcategory_id2]');
+    eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
+  }
+  
+  {% if form.classcategory_id2 is defined %}
+  fnSetClassCategories(
+    document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
+  );
+  {% endif %}
+  
+</script>{% endblock %}
 {% block main %}
-    {# todo ブロック化}
-    <div id="topicpath" class="row">
-        {% for ProductCategory in Product.ProductCategories %}
-        <ol>
-            <li><a href="{{ url('product_list') }}">全商品</a></li>
-            {% for Category in ProductCategory.Category.path %}
-                <li><a href="{{ url('product_list') }}?category_id={{ Category.id }}">{{ Category.name }}</a></li>
-            {% endfor %}
-            <li>{{ Product.name }}</li>
-        </ol>
+<div class="row">
+  <div class="col-sm-6">
+     
+    {% if Product.ProductImage|length > 1 %}  
+    <div id="product-detail-carousel" data-ride="carousel" class="carousel slide">
+      <ol class="carousel-indicators">
+        {% set index = 0 %}
+        {% for ProductImage in Product.ProductImage %}
+        <li data-target="#product-detail-carousel" data-slide-to="{{ index }}" class="{{ index == 0 ? 'active' }}"></li>  {% set index = index + 1 %}
         {% endfor %}
-    </div>
-    #}
-
-    <!-- ▼item_detail▼ -->
-    <div id="item_detail">
-        <div class="row">
-            <!--★画像★-->
-            <div id="item_photo_area" class="col-sm-6">
-                <div class="slides">
-                    {% if Product.ProductImage|length > 0 %}
-                        {% for ProductImage in Product.ProductImage %}
-                        <div><img src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"/></div>
-                        {% endfor %}
-                    {% else %}
-                        <div><img src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}"/></div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <section id="item_detail_area" class="col-sm-6">
-
-                <!--★商品名★-->
-                <h3 class="item_name">{{ Product.name }}</h3>
-                <div class="item_detail">
-                    <!--★通常価格★-->
-                    {% if Product.hasProductClass -%}
-                        {% if Product.getPrice01Min == Product.getPrice01Max %}
-                        <p class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }}</span> <span class="small">税込</span></p>
-                        {% elseif Product.getPrice01Min is not null and Product.getPrice01Max is not null %}
-                        <p class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }}</span> ～ <span class="price01_default">{{ Product.getPrice01IncTaxMax|price }}</span> <span class="small">税込</span></p>
-                        {% endif %}
-                    {% else -%}
-                        {% if Product.getPrice01Max is not null %}
-                        <p class="normal_price"> 通常価格：<span class="price01_default">{{ Product.getPrice01IncTaxMin|price }}</span> <span class="small">税込</span></p>
-                        {% endif %}
-                    {% endif -%}
-
-                    <!--★販売価格★-->
-                    {% if Product.hasProductClass -%}
-                        {% if Product.getPrice02Min == Product.getPrice02Max %}
-                        <p class="sale_price text-primary"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }}</span> <span class="small">税込</span></p>
-                        {% else %}
-                        <p class="sale_price text-primary"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }}</span> ～ <span class="price02_default">{{ Product.getPrice02IncTaxMax|price }}</span> <span class="small">税込</span></p>
-                        {% endif %}
-                    {% else -%}
-                        <p class="sale_price text-primary"> <span class="price02_default">{{ Product.getPrice02IncTaxMin|price }}</span> <span class="small">税込</span></p>
-                    {% endif -%}
-
-                    <!--▼商品コード-->
-                    <p class="item_code">商品コード： <span id="item_code_default">
-                        {%- if Product.hasProductClass -%}
-                            {{ Product.code_min }} ～ {{ Product.code_max }}
-                        {%- else -%}
-                            {{ Product.code_min }}
-                        {%- endif -%} </span> </p>
-                    <!--▲商品コード-->
-
-                    <!-- ▼関連カテゴリ▼ -->
-                    <div class="relative_cat">
-                        <p>関連カテゴリ</p>
-                          {% for ProductCategory in Product.ProductCategories %}
-                        <ol>
-                            {% for Category in ProductCategory.Category.path %}
-                            <li><a href="{{ url('product_list') }}?category_id={{ Category.id }}">{{ Category.name }}</a></li>
-                            {% endfor %}
-                        </ol>
-                        {% endfor %}
-                    </div>
-                    <!-- ▲関連カテゴリ▲ -->
-
-                    <form action="?" method="post" id="form1" name="form1">
-                        <!--▼買い物かご-->
-                        <div class="cart_area">
-                            {% if Product.stock_find %}
-
-                                {# 規格 #}
-                                {% if form.classcategory_id1 is defined %}
-                                <ul class="classcategory_list">
-                                    {# 規格1 #}
-                                    <li>
-                                        {{ form_widget(form.classcategory_id1) }}
-                                        {{ form_errors(form.classcategory_id1) }}
-                                    </li>
-                                    {# 規格2 #}
-                                    {% if form.classcategory_id2 is defined %}
-                                        <li>
-                                            {{ form_widget(form.classcategory_id2) }}
-                                            {{ form_errors(form.classcategory_id2) }}
-                                        </li>
-                                     {% endif %}
-                                </ul>
-                                {% endif %}
-
-                                {# 数量 #}
-                                <dl class="quantity">
-                                    <dt>数量</dt>
-                                    <dd>
-                                        {{ form_widget(form.quantity) }}
-                                        {{ form_errors(form.quantity) }}
-                                    </dd>
-                                </dl>
-
-                                {# カートボタン #}
-                                <div class="btn_area">
-                                    <ul class="row">
-                                        <li class="col-xs-12 col-sm-8"><button type="submit" class="btn btn-primary btn-block">カートに入れる</button></li>
-                                    </ul>
-                                </div>
-                            {% else %}
-                                {# 在庫がない場合は品切れボタンのみ表示 #}
-                                <div class="btn_area">
-                                    <ul class="row">
-                                        <li class="col-xs-12 col-sm-8"><button type="button" class="btn btn-default btn-block" disabled="disabled">ただいま品切れ中です</button></li>
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <!--▲買い物かご-->
-                        {{ form_rest(form) }}
-                    </form>
-
-                    <!--★商品説明★-->
-                    <p class="item_comment">{{ Product.description_detail }}</p>
-
-                </div>
-                <!-- /.item_detail -->
-
-            </section>
-            <!--詳細ここまで-->
+      </ol>
+      <div role="listbox" class="carousel-inner">
+        {% set index = 0 %}
+        {% for ProductImage in Product.ProductImage %}
+        <div class="item {{ index == 0 ? 'active' }}"><img width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"/></div>  {% set index = index + 1 %}
+        {% endfor %}
+      </div><a href="#product-detail-carousel" role="button" data-slide="prev" class="left carousel-control"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span><span class="sr-only">Previous</span></a><a href="#product-detail-carousel" role="button" data-slide="next" class="right carousel-control"><span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span><span class="sr-only">Next</span></a>
+    </div>{% elseif Product.ProductImage|length == 1 %}
+      {% for ProductImage in Product.ProductImage %}<img width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}"/>  {% endfor %}
+    {% else %}<img width="100%" src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}"/>{% endif %}
+  </div>
+  <div class="col-sm-6">
+    <h1 class="page-header">{{  Product.name }}</h1>{# 通常価格を取得 #}
+    {% set price01 = null %}
+    {% if Product.hasProductClass -%}
+      {% if Product.getPrice01Min == Product.getPrice01Max %}
+        {% set price01 = Product.getPrice01IncTaxMin|price %}
+      {% elseif Product.getPrice01Min is not null and Product.getPrice01Max is not null %}
+        {% set price01 = Product.getPrice01IncTaxMin|price ~ '〜' ~ Product.getPrice01IncTaxMax|price %}
+      {% endif %}
+    {% else -%}
+      {% if Product.getPrice01Max is not null %}
+        {% set price01 = Product.getPrice01IncTaxMin|price %}
+      {% endif %}
+    {% endif -%}
+    {% if price01 is not null %}
+    <p> <small>通常価格：{{ price01 }} 税込</small></p>{% endif %}{# 販売価格を取得 #}
+    {% set price02 = null %}
+    {% if Product.hasProductClass -%}
+      {% if Product.getPrice02Min == Product.getPrice02Max %}
+        {% set price02 = Product.getPrice02IncTaxMin|price %}
+      {% elseif Product.getPrice02Min is not null and Product.getPrice02Max is not null %}
+        {% set price02 = Product.getPrice02IncTaxMin|price ~ '〜' ~ Product.getPrice02IncTaxMax|price %}
+      {% endif %}
+    {% else -%}
+      {% if Product.getPrice02Max is not null %}
+        {% set price02 = Product.getPrice02IncTaxMin|price %}
+      {% endif %}
+    {% endif -%}
+    {% if price02 is not null %}
+    <p class="lead"><strong class="text-primary">{{ price02 }}</strong>  <small>税込 </small></p>{% endif %}
+    <hr/>
+    <dl>{%- if Product.code_min != '' %}
+      <dt>商品コード</dt>  {%- if Product.hasProductClass -%}
+      <dd>{{ Product.code_min }} ～ {{ Product.code_max }}</dd>  {%- else -%}
+      <dd>{{ Product.code_min }}</dd>  {%- endif -%}
+      {%- endif -%}
+      <hr/>
+      <dt>
+         
+        関連カテゴリ
+      </dt>
+      <dd>
+        {% for ProductCategory in Product.ProductCategories %}
+          {% for Category in ProductCategory.Category.path %} <a href="{{ url('product_list') }}?category_id={{ Category.id }}">{{ Category.name }}</a>  {% endfor %}<br/>{% endfor %}
+      </dd>
+    </dl>
+    <hr/>
+    <form action="?" method="post" id="form1" name="form1" class="form-horizontal">
+      {% if Product.stock_find %} 
+        {# 規格 #}
+        {% if form.classcategory_id1 is defined %}
+      <div class="form-group">
+        <div class="col-md-8">
+          {# 規格1 #}
+          {{ form_widget(form.classcategory_id1) }} {{ form_errors(form.classcategory_id1) }}
         </div>
-
-        {# フリーエリア #}
-        {% if Product.freearea %}
-        <div id="sub_area" class="row">
-            <div class="col-sm-10 col-sm-offset-1">
-                <div class="freearea">{{ include(template_from_string(Product.freearea)) }}</div>
-            </div>
+      </div>  {% endif %}
+        {% if form.classcategory_id2 is defined %}
+      <div class="form-group">
+        <div class="col-md-8">
+          {# 規格2 #}
+          {{ form_widget(form.classcategory_id2) }} {{ form_errors(form.classcategory_id2) }}
         </div>
-        {% endif %}
-    </div>
-    <!-- ▲item_detail▲ -->
-{% endblock %}
+      </div>  {% endif %}
+      <div class="form-group">{# 数量 #}
+        <div class="col-sm-2">
+          <label class="control-label">数量</label>
+        </div>
+        <div class="col-sm-3">{{ form_widget(form.quantity) }} {{ form_errors(form.quantity) }}</div>
+      </div>
+      <div class="form-group">{# カートボタン #}
+        <div class="col-md-8">
+          <button type="submit" class="btn btn-primary btn-lg btn-block">カートに入れる</button>
+        </div>
+      </div>{% else %}
+        {# 在庫がない場合は品切れボタンのみ表示 #}
+      <div class="form-group">
+        <div class="col-md-8">
+          <button type="submit" disabled="disabled" class="btn btn-default btn-lg btn-block">ただいま品切れ中です</button>
+        </div>
+      </div>{% endif %}
+      {{ form_rest(form) }}
+    </form>
+  </div>
+</div>{% endblock %}

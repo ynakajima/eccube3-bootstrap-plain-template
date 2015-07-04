@@ -1,0 +1,173 @@
+| {% extends 'default_frame.twig' %}
+| {% set body_class = 'product_page' %}
+
+| {% block javascript %}
+script.
+  eccube.classCategories = {{ Product.class_categories|json_encode|raw }};
+
+  // 規格2に選択肢を割り当てる。
+  function fnSetClassCategories(form, classcat_id2_selected) {
+    var $form = $(form);
+    var product_id = $form.find('input[name=product_id]').val();
+    var $sele1 = $form.find('select[name=classcategory_id1]');
+    var $sele2 = $form.find('select[name=classcategory_id2]');
+    eccube.setClassCategories($form, product_id, $sele1, $sele2, classcat_id2_selected);
+  }
+
+  {% if form.classcategory_id2 is defined %}
+  fnSetClassCategories(
+    document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
+  );
+  {% endif %}
+
+| {% endblock %}
+
+
+| {% block main %}
+.row
+  //- 商品写真
+  .col-sm-6 
+    | {% if Product.ProductImage|length > 1 %}  
+    #product-detail-carousel.carousel.slide(data-ride='carousel')
+      ol.carousel-indicators
+        | {% set index = 0 %}
+        | {% for ProductImage in Product.ProductImage %}
+        li(class!="{{ index == 0 ? 'active' }}" data-target="#product-detail-carousel" data-slide-to="{{ index }}")
+        |   {% set index = index + 1 %}
+        | {% endfor %}
+      .carousel-inner(role="listbox")
+        | {% set index = 0 %}
+        | {% for ProductImage in Product.ProductImage %}
+        .item(class!="{{ index == 0 ? 'active' }}")
+          img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}")
+        |   {% set index = index + 1 %}
+        | {% endfor %}
+      a.left.carousel-control(href="#product-detail-carousel" role="button" data-slide="prev")
+        span.glyphicon.glyphicon-chevron-left(aria-hidden="true")
+        span.sr-only
+          | Previous
+      a.right.carousel-control(href="#product-detail-carousel" role="button" data-slide="next")
+        span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
+        span.sr-only
+          | Next
+    | {% elseif Product.ProductImage|length == 1 %}
+    |   {% for ProductImage in Product.ProductImage %}
+    img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ProductImage|no_image_product }}")
+    |   {% endfor %}
+    | {% else %}
+    img(width="100%" src="{{ app.config.image_save_urlpath }}/{{ ''|no_image_product }}")
+    | {% endif %}
+  
+  //- 商品情報
+  .col-sm-6
+    h1.page-header {{  Product.name }}
+
+    //- 通常価格
+    | {# 通常価格を取得 #}
+    | {% set price01 = null %}
+    | {% if Product.hasProductClass -%}
+    |   {% if Product.getPrice01Min == Product.getPrice01Max %}
+    |     {% set price01 = Product.getPrice01IncTaxMin|price %}
+    |   {% elseif Product.getPrice01Min is not null and Product.getPrice01Max is not null %}
+    |     {% set price01 = Product.getPrice01IncTaxMin|price ~ '〜' ~ Product.getPrice01IncTaxMax|price %}
+    |   {% endif %}
+    | {% else -%}
+    |   {% if Product.getPrice01Max is not null %}
+    |     {% set price01 = Product.getPrice01IncTaxMin|price %}
+    |   {% endif %}
+    | {% endif -%}
+
+    | {% if price01 is not null %}
+    p 
+      small 通常価格：{{ price01 }} 税込
+    | {% endif %}
+
+    //- 販売価格
+    | {# 販売価格を取得 #}
+    | {% set price02 = null %}
+    | {% if Product.hasProductClass -%}
+    |   {% if Product.getPrice02Min == Product.getPrice02Max %}
+    |     {% set price02 = Product.getPrice02IncTaxMin|price %}
+    |   {% elseif Product.getPrice02Min is not null and Product.getPrice02Max is not null %}
+    |     {% set price02 = Product.getPrice02IncTaxMin|price ~ '〜' ~ Product.getPrice02IncTaxMax|price %}
+    |   {% endif %}
+    | {% else -%}
+    |   {% if Product.getPrice02Max is not null %}
+    |     {% set price02 = Product.getPrice02IncTaxMin|price %}
+    |   {% endif %}
+    | {% endif -%}
+
+    | {% if price02 is not null %}
+    p.lead
+      strong.text-primary {{ price02 }}
+      |   
+      small 税込 
+    | {% endif %}
+
+    hr 
+
+    dl
+      //- 商品コード
+      | {%- if Product.code_min != '' %}
+      dt
+        | 商品コード
+      |   {%- if Product.hasProductClass -%}
+      dd {{ Product.code_min }} ～ {{ Product.code_max }}
+      |   {%- else -%}
+      dd {{ Product.code_min }}
+      |   {%- endif -%}
+      | {%- endif -%}
+      
+      hr
+
+      //- 関連カテゴリ
+      dt 
+        | 関連カテゴリ
+      dd
+        | {% for ProductCategory in Product.ProductCategories %}
+        |   {% for Category in ProductCategory.Category.path %} 
+        a(href!="{{ url('product_list') }}?category_id={{ Category.id }}") {{ Category.name }}
+        |   {% endfor %}
+        br
+        | {% endfor %}
+
+    hr
+
+    //- 買い物カゴ
+    form.form-horizontal(action="?" method="post" id="form1" name="form1")
+      | {% if Product.stock_find %} 
+      |   {# 規格 #}
+      |   {% if form.classcategory_id1 is defined %}
+      .form-group
+        .col-md-8
+          | {# 規格1 #}
+          | {{ form_widget(form.classcategory_id1) }} {{ form_errors(form.classcategory_id1) }}
+      |   {% endif %}
+      |   {% if form.classcategory_id2 is defined %}
+      .form-group
+        .col-md-8
+          | {# 規格2 #}
+          | {{ form_widget(form.classcategory_id2) }} {{ form_errors(form.classcategory_id2) }}
+      |   {% endif %}
+
+      .form-group
+        | {# 数量 #}
+        .col-sm-2
+          label.control-label 数量
+        .col-sm-3
+          | {{ form_widget(form.quantity) }} {{ form_errors(form.quantity) }}
+
+      .form-group
+        | {# カートボタン #}
+        .col-md-8
+          button.btn.btn-primary.btn-lg.btn-block(type="submit") カートに入れる
+
+      | {% else %}
+      |   {# 在庫がない場合は品切れボタンのみ表示 #}
+      .form-group
+        .col-md-8
+          button.btn.btn-default.btn-lg.btn-block(type="submit" disabled="disabled") ただいま品切れ中です
+      | {% endif %}
+      | {{ form_rest(form) }}
+
+| {% endblock %}
