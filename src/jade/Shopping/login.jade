@@ -1,0 +1,41 @@
+| {% extends 'default_frame.twig' %}
+| {% set body_class = 'cart_page' %}
+| {% block main %}
+.row
+  .col-sm-10.col-sm-offset-1
+    h1.page-header ログイン
+
+    form(method="post" action!="{{ url('login_check') }}")
+      input(type="hidden" name="_target_path" value="shopping")
+      input(type="hidden" name="_failure_path" value="shopping_login")
+      input(type="hidden" name="_csrf_token" value!="{{ csrf_token('authenticate') }}")
+      .row
+        .col-sm-6
+          .form-group
+            | {{ form_widget(form.login_email, {attr: {placeholder: 'メールアドレス'}}) }}
+            .checkbox
+              label
+                input(type="checkbox")
+                | メールアドレスを記憶
+          .form-group
+            | {{ form_widget(form.login_pass, {attr: {placeholder: 'パスワード'}}) }}
+
+          | {% if error %}
+          .form-group
+            span.text-danger {{ error.message|trans }}
+          | {% endif %}
+
+          p
+            button.btn.btn-info.btn-block.btn-lg(type="submit") ログイン
+            ul
+              li
+                a(href!="{{ url('forgot') }}") ログイン情報をお忘れですか？
+              li
+                a(href!="{{ url('entry') }}") 新規会員登録
+
+        .col-sm-5.col-sm-offset-1
+          p 会員登録をせずに購入手続きをされたい方は、下記よりお進みください。
+          p
+            a.btn.btn-info.btn-block.btn-lg(href="{{ url('shopping_nonmember') }}") ゲスト購入
+
+| {% endblock %}
