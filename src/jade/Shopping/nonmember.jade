@@ -1,0 +1,97 @@
+| {% extends 'default_frame.twig' %}
+| {% set body_class = 'cart_page' %}
+| {% block javascript %}
+script(src="//ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8")
+script.
+  $(function() {
+      $('#zip-search').click(function() {
+          AjaxZip3.zip2addr('nonmember[zip][zip01]', 'nonmember[zip][zip02]', 'nonmember[address][pref]', 'nonmember[address][addr01]');
+      });
+  });
+| {% endblock %}
+
+| {% block main %}
+h1.page-header お客様情報の入力
+.row
+  .col-md-10.col-md-offset-1
+    ol.breadcrumb.text-center
+      li.text-muted
+        span.label.label-default 1
+        |  カートの商品
+      li.active
+        span.label.label-primary 2
+        strong.text-primary  お客様情報
+      li.text-muted
+        span.label.label-default 3
+        |  ご注文内容確認
+      li.text-muted 
+        span.label.label-default 4
+        |  完了
+
+    form(method="post" action="{{ url('shopping_nonmember') }}")
+      | {{ form_widget(form._token) }}
+      dl.dl-horizontal
+        dt {{ form_label(form.name) }}
+          small.text-primary  ※必須
+        dd.form-group
+          .row
+            .col-sm-4
+              | {{ form_widget(form.name.name01, { attr : { placeholder: '姓' }}) }}
+              | {{ form_errors(form.name.name01) }}
+            .col-sm-4
+              | {{ form_widget(form.name.name02, { attr : { placeholder: '名' }}) }}
+              | {{ form_errors(form.name.name02) }}
+
+        dt {{ form_label(form.kana) }}
+          small.text-primary  ※必須
+        dd.form-group
+          .row
+            .col-sm-4
+              | {{ form_widget(form.kana.kana01, { attr : { placeholder: 'セイ' }}) }}
+              | {{ form_errors(form.kana.kana01) }}
+            .col-sm-4
+              | {{ form_widget(form.kana.kana02, { attr : { placeholder: 'メイ' }}) }}
+              | {{ form_errors(form.kana.kana02) }}
+
+        dt {{ form_label(form.company_name) }}
+        dd.form-group
+          .row
+            .col-sm-8
+              | {{ form_widget(form.company_name) }}
+              | {{ form_errors(form.company_name) }}
+
+        dt {{ form_label(form.address) }}
+          small.text-primary  ※必須
+        dd
+          .row
+            .col-sm-12.form-inline.form-group(class!="{% if form.zip.zip01.vars.errors is not empty or form.zip.zip02.vars.errors is not empty %}text-danger{% endif %}")
+              | {{ form_widget(form.zip) }}
+          .row
+            .col-sm-12(class="{% if form.address.pref.vars.errors is not empty or form.address.addr01.vars.errors is not empty or form.address.addr02.vars.errors is not empty %}text-danger{% endif %}")
+              | {{ form_widget(form.address) }}
+              | {{ form_errors(form.address) }}
+
+        dt {{ form_label(form.tel) }}
+          small.text-primary  ※必須
+        dd.form-group.form-inline
+          .row
+            .col-sm-12
+              | {{ form_widget(form.tel, {attr : {class : 'short'}}) }}
+              | {{ form_errors(form.tel) }}
+
+        dt {{ form_label(form.email) }}
+          small.text-primary  ※必須
+        dd
+          .row
+            .col-sm-12
+              .form-group(class="{% if form.email.first.vars.errors is not empty %}text-danger{% endif %}")
+                | {{ form_widget(form.email.first) }}
+              .form-group(class="{% if form.email.second.vars.errors is not empty %}text-danger{% endif %}")
+                | {{ form_widget(form.email.second, {attr: {placeholder: '確認のためもう一度入力してください'}}) }}
+                | {{ form_errors(form.email.first) }}
+                | {{ form_errors(form.email.second) }}
+      .row.col-sm-4.col-sm-offset-4
+        button.btn.btn-primary.btn-block(type="submit") 次へ
+        a.btn.btn-info.btn-block(href="{{ url('cart') }}") 戻る
+
+| {% endblock %}

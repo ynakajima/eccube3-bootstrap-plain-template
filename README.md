@@ -69,8 +69,8 @@ $ cp -R {EC-CUBEのディレクトリ}/html/template/default {EC-CUBEのディ�
 * ✔ <del>Product/detail</del>
 * ✔ <del>Cart/index</del>
 * ✔ <del>Shopping/login</del>
+* ✔ <del>Shopping/nonmember</del>
 * Shopping/index
-* Shopping/nonmember
 * Shopping/shipping
 * Shopping/shipping_edit
 * Shopping/shipping_multiple
